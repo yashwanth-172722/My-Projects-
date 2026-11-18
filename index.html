@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ReliefRelay: FloodFirst Hack</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Relief<span>Relay</span> · FloodFirst</h1>
+  <span class="tag" id="net">ONLINE</span>
+  <button class="btn amb sm" id="theme" type="button">Theme</button>
+</header>
+<div class="marq" role="marquee" aria-label="Official flood advisories"><div id="alerts"></div></div>
+<nav aria-label="Sections">
+  <a href="#sos">SOS</a><a href="#map">Map</a><a href="#camps">Relief Camps</a><a href="#board">Dispatch</a><a href="#pledge">Pledge</a><a href="#sms">SMS Mock</a>
+</nav>
+<main>
+  <section aria-label="Overview"><div class="stats" id="stats"></div></section>
+
+  <div class="two">
+    <section id="sos">
+      <h2>🆘 Send an SOS</h2>
+      <p class="sub">Lightweight form. Works offline: requests are queued and sent when signal returns.</p>
+      <form id="sosf" autocomplete="off">
+        <label for="nm">Name / landmark</label><input type="text" id="nm" required placeholder="e.g. Rooftop, Green Lane 4">
+        <div class="row">
+          <div><label for="hc">Stranded headcount *</label><input type="number" id="hc" min="1" max="200" required value="1"></div>
+          <div><label for="ph">Phone *</label><input type="tel" id="ph" required placeholder="98XXXXXXXX" pattern="[0-9+ ]{8,15}"></div>
+        </div>
+        <label>Critical needs *</label>
+        <div class="chk" id="needs">
+          <label><input type="checkbox" value="Rescue Boat"> Rescue Boat</label>
+          <label><input type="checkbox" value="Medical Aid"> Medical Aid</label>
+          <label><input type="checkbox" value="Drinking Water"> Drinking Water</label>
+          <label><input type="checkbox" value="Food Packets"> Food Packets</label>
+        </div>
+        <div class="row">
+          <div><label for="la">Latitude</label><input type="text" id="la" required value="17.4300"></div>
+          <div><label for="lo">Longitude</label><input type="text" id="lo" required value="78.4500"></div>
+        </div>
+        <p style="margin:8px 0"><button class="btn alt sm" id="gps" type="button">📍 Use my GPS</button></p>
+        <button class="btn" type="submit">Broadcast SOS</button>
+        <div class="msg" id="sosmsg" role="status"></div>
+      </form>
+      <div class="info" id="track">No SOS sent from this device yet.</div>
+    </section>
+
+    <section id="map">
+      <h2>🗺️ Disaster Zone Map</h2>
+      <p class="sub">Tap a beacon for details. Squares are relief camps.</p>
+      <svg class="map" id="svg" viewBox="0 0 100 60" role="img" aria-label="Schematic map of distress beacons and relief camps"></svg>
+      <div class="legend">
+        <span><i class="dot red"></i>Urgent evacuation</span><span><i class="dot org"></i>Medical</span>
+        <span><i class="dot yel"></i>Food / water</span><span><i class="dot" style="background:var(--ok)"></i>Rescued</span>
+      </div>
+      <div class="info" id="pininfo">Select a beacon.</div>
+    </section>
+  </div>
+
+  <section id="camps">
+    <h2>⛺ Relief Camp Directory</h2>
+    <p class="sub">Live beds and supply levels. Red bars mean urgently undersupplied.</p>
+    <div class="camps" id="campgrid"></div>
+  </section>
+
+  <section id="board">
+    <h2>🚤 Volunteer Dispatch Board</h2>
+    <p class="sub">First team to claim locks the mission, so no duplicate dispatches.</p>
+    <div class="tools">
+      <label for="team" style="margin:0">Your team</label>
+      <select id="team"><option>Boat Team Alpha</option><option>4x4 Convoy Bravo</option><option>Ambulance Unit Charlie</option><option>Volunteer Group Delta</option></select>
+      <label for="flt" style="margin:0">Show</label>
+      <select id="flt"><option value="open">Open + active</option><option value="all">All</option></select>
+      <span class="badge">Sorted by urgency, then distance from base</span>
+    </div>
+    <div class="board" id="jobs"></div>
+  </section>
+
+  <div class="two">
+    <section id="pledge">
+      <h2>📦 Supply Pledge</h2>
+      <p class="sub">Pledge supplies to a relief hub. Suggested hub is the most undersupplied.</p>
+      <form id="plf">
+        <label for="pc">Relief camp</label><select id="pc"></select>
+        <div class="row">
+          <div><label for="pi">Item</label><select id="pi"><option value="water">Bottled Water</option><option value="jackets">Life Jackets</option><option value="rations">Dry Rations</option></select></div>
+          <div><label for="pq">Quantity</label><input type="number" id="pq" min="1" value="20" required></div>
+        </div>
+        <label for="pg">Group / donor</label><input type="text" id="pg" required placeholder="e.g. Rotary Club">
+        <p><button class="btn amb" type="submit">Pledge supplies</button></p>
+        <div class="msg" id="plmsg" role="status"></div>
+      </form>
+    </section>
+    <section id="sms">
+      <h2>📱 SMS Broadcast Mock</h2>
+      <p class="sub">No data? Send text like <b>SOS 4 BOAT 17.4310 78.4420 9876543210</b>. Needs: BOAT, MED, WATER, FOOD.</p>
+      <form id="smsf"><label for="smst">Incoming SMS</label><input type="text" id="smst" required placeholder="SOS 4 BOAT 17.43 78.44 9876543210">
+        <p><button class="btn alt" type="submit">Simulate SMS</button></p><div class="msg" id="smsmsg" role="status"></div></form>
+    </section>
+  </div>
+</main>
+<footer>ReliefRelay demo · simulated data stored in your browser only · for emergencies call your local disaster helpline.</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
